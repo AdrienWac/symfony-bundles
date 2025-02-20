@@ -1,0 +1,16 @@
+includes:
+  - vendor/phpstan/phpstan-phpunit/extension.neon
+  - vendor/phpstan/phpstan-phpunit/rules.neon
+
+parameters:
+  level: 4
+  paths:
+    - src
+    - tests
+  excludePaths:
+    - tests/tmp/*
+    - src/Maker/templates/*.tpl.php
+    - src/Maker/Decorator/Util/ClassSourceManipulator.php
+  ignoreErrors:
+  reportUnmatchedIgnoredErrors: true
+  tmpDir: var

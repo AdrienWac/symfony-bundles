@@ -1,0 +1,19 @@
+services:
+
+  _defaults:
+    public: false
+
+  maker.maker.make_hexagonal_use_case:
+      class: AdrienLbt\HexagonalMakerBundle\Maker\MakeHexagonalUseCase
+      arguments: [
+        '%hexagonal_maker.domain_path%'
+      ]
+      tags: 
+        - {name: 'maker.command'}
+  command:
+    namespace: AdrienLbt\HexagonalMakerBundle\Command\
+    resource: '../src/Command'
+    tags:
+      - { name: 'console.command' }
+    autowire: true
+    autoconfigure: true
