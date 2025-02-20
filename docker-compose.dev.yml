@@ -1,0 +1,9 @@
+version: '3.3'
+
+services:
+  hexagonal-make-bundle:
+    image: adrienlbt/php:${PHP_VERSION}-dev
+    container_name: hexagonal-make-bundle
+    volumes:
+      - ${APP_LOCAL_PATH}:/var/www/html
+
