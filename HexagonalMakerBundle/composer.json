@@ -1,0 +1,34 @@
+{
+    "name": "adrienlbt/hexagonal-maker-bundle",
+    "description": "Hexagonal Maker bundle add commands to Symfony Maker bundle to help you to create files for hexagonal architecture.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrien Lbt"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/http-kernel": "7.3.x-dev",
+        "symfony/framework-bundle": "7.3.x-dev",
+        "php": ">=8.2",
+        "symfony/config": "7.3.x-dev",
+        "symfony/console": "7.3.x-dev",
+        "symfony/dependency-injection": "7.3.x-dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.1@dev",
+        "phpstan/phpstan": "2.1.x-dev",
+        "phpstan/phpstan-phpunit": "2.0.x-dev",
+        "rregeer/phpunit-coverage-check": "dev-master",
+        "squizlabs/php_codesniffer": "4.0.x-dev",
+        "symfony/maker-bundle": "^1.0@dev"
+    },
+    "autoload": {
+        "psr-4": { "AdrienLbt\\HexagonalMakerBundle\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "AdrienLbt\\HexagonalMakerBundle\\Tests\\": "tests/" }
+    }
+}

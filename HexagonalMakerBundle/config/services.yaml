@@ -1,0 +1,13 @@
+services:
+
+  _defaults:
+    public: false
+
+  AdrienLbt\HexagonalMakerBundle\Command\MakeDomainUseCase:
+      arguments: [
+        '%hexagonal_maker.application_path%', 
+        '%hexagonal_maker.domain_path%', 
+        '%hexagonal_maker.infrastructure_path%'
+      ]
+      tags: 
+        - {name: 'maker.command'}
