@@ -15,6 +15,7 @@ class HexagonalMakerBundle extends AbstractBundle
 {
     /**
      * Créer "l'arbre" de configuration du bundle
+     * foo
      *
      * @param DefinitionConfigurator $definition
      * @return void

@@ -30,8 +30,5 @@
     },
     "autoload-dev": {
         "psr-4": { "AdrienLbt\\HexagonalMakerBundle\\Tests\\": "tests/" }
-    },
-    "archive": {
-        "exclude": ["../scripts", "../docker-compose.dev.yml", "../README.md"]
     }
 }
