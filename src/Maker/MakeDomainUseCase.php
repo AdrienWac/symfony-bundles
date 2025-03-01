@@ -3,6 +3,7 @@
 namespace AdrienLbt\HexagonalMakerBundle\Maker;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\MakeTrait;
+use Symfony\Bundle\MakerBundle\Maker\Common\UidTrait;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Str;
