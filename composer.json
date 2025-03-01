@@ -26,7 +26,10 @@
         "symfony/maker-bundle": "^1.0@dev"
     },
     "autoload": {
-        "psr-4": { "AdrienLbt\\HexagonalMakerBundle\\": "src/" }
+        "psr-4": { 
+            "AdrienLbt\\HexagonalMakerBundle\\": "src/",
+            "Symfony\\Bundle\\MakerBundle\\": "src/Maker/Decorator/"
+        }
     },
     "autoload-dev": {
         "psr-4": { "AdrienLbt\\HexagonalMakerBundle\\Tests\\": "tests/" }

@@ -1,7 +1,8 @@
 <?php
 
-namespace AdrienLbt\HexagonalMakerBundle\Command;
+namespace AdrienLbt\HexagonalMakerBundle\Maker;
 
+use AdrienLbt\HexagonalMakerBundle\Maker\MakeTrait;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Str;
@@ -14,6 +15,9 @@ use Symfony\Component\Console\Input\InputInterface;
 
 final class MakeDomainUseCase extends AbstractMaker
 {
+    use UidTrait;
+    use MakeTrait;
+
     public function __construct(
         private string $applicationPath,
         private string $domainPath,
@@ -52,13 +56,34 @@ final class MakeDomainUseCase extends AbstractMaker
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $useCaseName = $input->getArgument('name');
-        $useCaseFolderPath = $input->getArgument('folder_path');
-
-        $useCaseFolderPath = $this->domainPath . '/' . $useCaseFolderPath;
-        $useCaseFilePath = $useCaseFolderPath . '/' . $useCaseName . '.php';
-        $io->writeln(
-            'Creating or updating the use case class: <info>' . $useCaseName . ' at '. $useCaseFilePath .'</info>'
+        $useCaseFolderPath = $this->sanitizeFolderPath(
+            $input->getArgument('folder_path')
         );
+
+        $useCaseNameSpace = "Domain\\UseCase\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName;
+        $requestNameSpace = "Domain\\Request\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName."Request";
+
+        $entityClassDetails = $generator->createClassNameDetails(
+            name: $useCaseName,
+            namespacePrefix: 'Domain\\UseCase\\',
+            suffix: 'UseCase'
+        );
+
+        $useStatements = new UseStatementGenerator([
+            $requestNameSpace,
+            // @todo Gérer via la configuration
+            'Domain\\API\\PresenterInterface'
+        ]);
+
+        $entityPath = $generator->generateClass(
+            className: $useCaseNameSpace,
+            templateName: __DIR__ .  '/templates/UseCase.tpl.php',
+            variables: [
+                "use_statements" => $useStatements,
+            ]
+        );
+
+        $generator->writeChanges();
     }
 
     public function configureDependencies(DependencyBuilder $dependencies, ?InputInterface $input = null): void

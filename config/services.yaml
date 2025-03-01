@@ -3,7 +3,7 @@ services:
   _defaults:
     public: false
 
-  AdrienLbt\HexagonalMakerBundle\Command\MakeDomainUseCase:
+  AdrienLbt\HexagonalMakerBundle\Maker\MakeDomainUseCase:
       arguments: [
         '%hexagonal_maker.application_path%', 
         '%hexagonal_maker.domain_path%', 
