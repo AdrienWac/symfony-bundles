@@ -87,6 +87,21 @@ final class MakeDomainUseCase extends AbstractMaker
         $generator->writeChanges();
     }
 
+    /**
+     * Sanitize use case folder path
+     * - Remove "/" at the end of file if present 
+     *
+     * @param string $useCaseFolderPath
+     * @return string Content of $useCaseFolderPath sanitize
+     */
+    private function sanitizeFolderPath(string $useCaseFolderPath): string
+    {
+        if (mb_substr($useCaseFolderPath, -1) === '/') {
+            return mb_substr($useCaseFolderPath, 0, -1);
+        }
+        return $useCaseFolderPath;
+    }
+
     public function configureDependencies(DependencyBuilder $dependencies, ?InputInterface $input = null): void
     {
     }
