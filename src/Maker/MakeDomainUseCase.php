@@ -65,7 +65,7 @@ final class MakeDomainUseCase extends AbstractMaker
         $useCaseNameSpace = "Domain\\UseCase\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName;
         $requestNameSpace = "Domain\\Request\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName."Request";
 
-        $entityClassDetails = $generator->createClassNameDetails(
+        $generator->createClassNameDetails(
             name: $useCaseName,
             namespacePrefix: 'Domain\\UseCase\\',
             suffix: 'UseCase'
@@ -77,7 +77,7 @@ final class MakeDomainUseCase extends AbstractMaker
             'Domain\\API\\PresenterInterface'
         ]);
 
-        $entityPath = $generator->generateClass(
+        $generator->generateClass(
             className: $useCaseNameSpace,
             templateName: __DIR__ .  '/templates/UseCase.tpl.php',
             variables: [
@@ -86,6 +86,231 @@ final class MakeDomainUseCase extends AbstractMaker
         );
 
         $generator->writeChanges();
+
+        $this->askForCreateResponseFile(
+            $useCaseName,
+            $useCaseFolderPath,
+            $input,
+            $io,
+            $generator
+        );
+
+        $this->askForCreatePresenterInterfaceFile(
+            $useCaseName,
+            $useCaseFolderPath,
+            $input,
+            $io,
+            $generator
+        );
+
+        $this->askForCreateRequestFile(
+            $useCaseName,
+            $useCaseFolderPath,
+            $input,
+            $io,
+            $generator
+        );
+
+        $this->writeSuccessMessage($io);
+    }
+
+    /**
+     * @todo Ajouter la liaison avec une entité du domaine (Question + choix + ajout de la propriété dans la classe)
+     * Create response file
+     *
+     * @param string $useCaseName
+     * @param string $useCaseFolderPath
+     * @param InputInterface $input
+     * @param ConsoleStyle $io
+     * @param Generator $generator
+     * @return void
+     */
+    private function askForCreateResponseFile(
+        string $useCaseName,
+        string $useCaseFolderPath,
+        InputInterface $input,
+        ConsoleStyle $io,
+        Generator $generator
+    ): void
+    {
+        $fullPathFile = 'Domain/Response/'.$useCaseFolderPath.'/'.$useCaseName.'Response.php';
+
+        $createFile = $io->confirm(
+            'Would you like to create the response file ('.$fullPathFile.') for use case '.$useCaseName.' ?', 
+            true
+        );
+
+        if (!$createFile) {
+            return;
+        }
+
+        $responseNameSpace = "Domain\\Response\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName."Response";
+
+        $generator->createClassNameDetails(
+            name: $useCaseName,
+            namespacePrefix: 'Domain\\Response\\',
+            suffix: 'Response'
+        );
+
+        $useStatements = new UseStatementGenerator([]);
+
+        $generator->generateClass(
+            $responseNameSpace,
+            __DIR__ .  '/templates/Response.tpl.php',
+            [
+                "use_statements" => $useStatements,
+            ]
+        );
+
+        $generator->writeChanges();
+    }
+
+    /**
+     * Create presenter interface file
+     *
+     * @param string $useCaseName
+     * @param string $useCaseFolderPath
+     * @param InputInterface $input
+     * @param ConsoleStyle $io
+     * @param Generator $generator
+     * @return void
+     */
+    private function askForCreatePresenterInterfaceFile(
+        string $useCaseName,
+        string $useCaseFolderPath,
+        InputInterface $input,
+        ConsoleStyle $io,
+        Generator $generator
+    ): void
+    {
+        $fullPathFile = 'Domain/API/'.$useCaseFolderPath.'/'.$useCaseName.'PresenterInterface.php';
+
+        $createFile = $io->confirm(
+            'Would you like to create the presenter interface file ('.$fullPathFile.') for use case '.$useCaseName.' ?', 
+            true
+        );
+
+        if (!$createFile) {
+            return;
+        }
+
+        $presenterInterfaceNameSpace = "Domain\\API\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName."PresenterInterface";
+        $responseNameSpace = "Domain\\Response\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName."Response";
+
+        $presenterInterfaceClassDetails = $generator->createClassNameDetails(
+            name: $useCaseName,
+            namespacePrefix: 'Domain\\API\\',
+            suffix: 'PresenterInterface'
+        );
+
+        $useStatements = new UseStatementGenerator([
+            $responseNameSpace
+        ]);
+
+        $presenterInterfacePath = $generator->generateClass(
+            className: $presenterInterfaceNameSpace,
+            templateName: __DIR__ .  '/templates/PresenterInterface.tpl.php',
+            variables: [
+                "use_statements" => $useStatements,
+                "use_case_name" => $useCaseName
+            ]
+        );
+
+        $generator->writeChanges();
+    }
+
+    /**
+     * @todo => Déplacer, après la création du fichier de request, la Constructor Property Promotion 
+     * de la request dans le use case
+     * Create Domain Request file
+     *
+     * @param InputInterface $input
+     * @param ConsoleStyle $io
+     * @param Generator $generator
+     * @return void
+     */
+    private function askForCreateRequestFile(
+        string $useCaseName,
+        string $useCaseFolderPath,
+        InputInterface $input,
+        ConsoleStyle $io,
+        Generator $generator
+    ): void
+    {
+        $fullPathFile = 'Domain/Request/'.$useCaseFolderPath.'/'.$useCaseName.'Request.php';
+
+        $createFile = $io->confirm(
+            'Would you like to create the request file ('.$fullPathFile.') for use case '.$useCaseName.' ?', 
+            true
+        );
+
+        if (!$createFile) {
+            return;
+        }
+
+        $requestNameSpace = "Domain\\Request\\".str_replace("/", "\\", $useCaseFolderPath)."\\".$useCaseName."Request";
+
+        $requestClassDetails = $generator->createClassNameDetails(
+            name: $useCaseName,
+            namespacePrefix: 'Domain\\Request\\',
+            suffix: 'Request'
+        );
+
+        $useStatements = new UseStatementGenerator([]);
+
+        $requestFilePath = $generator->generateClass(
+            className: $requestNameSpace,
+            templateName:__DIR__ .  '/templates/Request.tpl.php',
+            variables:[
+                "use_statements" => $useStatements,
+            ]
+        );
+
+        $generator->writeChanges();
+
+        $currentFields = $this->getPropertyNames($requestClassDetails->getFullName());
+        $manipulator = $this->createClassManipulator($requestFilePath, $io, false);
+
+        $isFirstField = true;
+
+        // @todo Récupérer les chemins de manière dynamique
+        $entityDomainTypes = self::getDomainEntityTypes(
+            basePath: 'var/www/html',
+            domainEntityDirectoryPath: 'src/Domain/Entity'
+        );
+
+        while (true) {
+            $newField = $this->askForNextField(
+                $io, 
+                $currentFields, 
+                $requestClassDetails->getFullName(), 
+                $isFirstField, 
+                otherValidTypes: $entityDomainTypes
+            );
+
+            $isFirstField = false;
+
+            if (null === $newField) {
+                break;
+            }
+
+            $fileManagerOperations = [];
+            $fileManagerOperations[$requestFilePath] = $manipulator;
+
+            $manipulator->addClassProperty(
+                mapping: $newField, 
+                withConstructorPropertyPromotion: true
+            );
+            $currentFields[] = $newField->propertyName;
+
+            foreach ($fileManagerOperations as $path => $manipulatorOrMessage) {
+                if (\is_string($manipulatorOrMessage)) {     /* @phpstan-ignore-line - https://github.com/symfony/maker-bundle/issues/1509 */
+                    $io->comment($manipulatorOrMessage);
+                } else {
+                    $this->dumpFile($path, $manipulatorOrMessage->getSourceCode(), $io);
+                }
+            }
+        }
     }
 
     /**
