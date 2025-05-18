@@ -31,7 +31,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
 
     public static function getCommandDescription(): string
     {
-        return 'Create or update a Domain use case class';
+        return 'Create a Domain use case class';
     }
 
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
@@ -58,6 +58,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $useCaseName = $input->getArgument('name');
+
         $useCaseFolderPath = $this->sanitizeFolderPath(
             $input->getArgument('folder_path')
         );
@@ -68,6 +69,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
             str_replace('/', '\\', $useCaseFolderPath),
             $useCaseName
         );
+
         $requestNameSpace = sprintf(
             '%s\\Request\\%s\\%sRequest',
             $this->domainPath,
@@ -76,6 +78,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
         );
         $presenterInterfaceNameSpace = sprintf('%s\\API\\PresenterInterface', $this->domainPath);
 
+        // @todo Useless ? 
         $generator->createClassNameDetails(
             name: $useCaseName,
             namespacePrefix: 'Domain\\UseCase\\',
