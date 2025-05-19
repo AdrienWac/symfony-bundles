@@ -6,7 +6,10 @@ use AdrienLbt\HexagonalMakerBundle\Maker\Factory\CreatorInterface;
 
 final class Creator implements CreatorInterface
 {
-    public function generateUseCase(): void
+    public function generateUseCase(
+        string $name,
+        string $folderPath
+    ): void
     {
         $useCase = new UseCaseFile();
     }
