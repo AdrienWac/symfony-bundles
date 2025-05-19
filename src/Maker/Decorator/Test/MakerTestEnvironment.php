@@ -294,7 +294,6 @@ final class MakerTestEnvironment
         $rootPath = str_replace('\\', '\\\\', realpath(__DIR__ . '/../..'));
 
         $this->createHexagonalMakerDirectory(\sprintf('%s/%s', $this->cachePath, $flexProjectDir));
-        $this->addHexagonalMakerRecipeAssets();
         $this->addHexagonalMakerBundleRepositorieToSkeletonComposerFile(\sprintf('%s/%s/composer.json', $this->cachePath, $flexProjectDir));
         $this->createHexagonalMakerNameSpace(\sprintf('%s/%s/composer.json', $this->cachePath, $flexProjectDir));
         // In Linux, git plays well with symlinks - we can add maker to the flex skeleton.
@@ -560,78 +559,5 @@ echo json_encode($missingDependencies);
         ];
 
         file_put_contents($composerJsonPath, json_encode($composerJson, \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
-    }
-
-    /**
-     * All actions to add symfony recipe in skeleton project
-     * - Fetch recipe content from repo
-     * - Create .flex/ folder in skeleton project
-     * - Create flex json config file
-     * @return void
-     */
-    private function addHexagonalMakerRecipeAssets(): void
-    {
-        $this->addRecipeContents($this->makerRepoPath, $this->flexPath);
-        $this->createFlexFolder($this->flexPath);
-        $this->createFlexConfigFile($this->flexPath);
-    }
-
-    /**
-     * Add content of recipes in destination path
-     * - Git clone directly in destination path ?
-     * - Git clone in source path and symlink in destination path ?
-     * @param string $sourcePath
-     * @param string $destinationPath
-     * @return void
-     */
-    private function addRecipeContents(string $sourcePath, string $destinationPath): void
-    {
-        if (file_exists($destinationPath . '/recipes')) {
-            return;
-        }
-
-        $this->fs->symlink($sourcePath . '/recipes', $destinationPath . '/recipes');
-    }
-
-    private function createFlexFolder(string $projectPath): void
-    {
-        if (file_exists($projectPath . '/.flex')) {
-            return;
-        }
-
-        $this->fs->mkdir($projectPath . '/.flex');
-    }
-
-    /**
-     * Creates a config.json file in the .flex directory.
-     */
-    private function createFlexConfigFile(string $projectPath): void
-    {
-        if (!file_exists($projectPath . '/.flex')) {
-            $this->createFlexFolder($projectPath);
-        }
-
-        $configContentPath = $projectPath . '/.flex/config.json';
-
-        if (file_exists($configContentPath)) {
-            return;
-        }
-
-        $this->fs->touch($configContentPath);
-
-        $configContent = [
-            'aliases' => [],
-            "repositories" => [
-                [
-                    "type" => "path",
-                    "url" => "../recipes"
-                ]
-            ]
-        ];
-
-        file_put_contents(
-            $configContentPath,
-            json_encode($configContent, \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES)
-        );
     }
 }
