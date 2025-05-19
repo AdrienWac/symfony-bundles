@@ -211,6 +211,8 @@ final class MakerTestEnvironment
 
                 $this->changeRootNamespaceIfNeeded();
 
+                $this->activeHexagonalMakerBundle();
+
                 file_put_contents($this->path . '/.gitignore', "var/cache/\nvendor/\n");
 
                 MakerTestProcess::create(
@@ -227,6 +229,24 @@ final class MakerTestEnvironment
             MakerTestProcess::create('git reset --hard && git clean -fd', $this->path)->run();
             $this->fs->remove($this->path . '/var/cache');
         }
+    }
+
+    /**
+     * Add Hexagonal Maker Bundle to bundle.php of flex project
+     */
+    private function activeHexagonalMakerBundle(): void
+    {
+        // $pathToBundleFile = $this->path.'/config/bundles.php';
+        // $bundles = require $pathToBundleFile;
+        // $bundles[] = "AdrienLbt\HexagonalMakerBundle\HexagonalMakerBundle::class => ['dev' => true]";
+
+        file_put_contents($this->path . '/config/bundles.php', "<?php
+
+return [
+    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+    Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
+    AdrienLbt\HexagonalMakerBundle\HexagonalMakerBundle::class => ['dev' => true],
+];");
     }
 
     public function runCommand(string $command): MakerTestProcess
