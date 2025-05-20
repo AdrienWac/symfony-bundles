@@ -21,11 +21,14 @@ class MakeHexagonalUseCaseTest extends MakerTestCase
         yield 'create_full_use_case' => [
             $this->createMakerTest()
                 ->run(function (MakerTestRunner $runner) {
+                    $folder = 'ParentFolder/ChildFolder/Foo';
+                    $name = 'Bar';
+
                     $output = $runner->runMaker([
                         // Folder
-                        'Foo',
+                        $folder,
                         // Use case class name
-                        'Bar',
+                        $name,
                         // Create Response file
                         'y',
                         // Create Presenter file
@@ -37,6 +40,16 @@ class MakeHexagonalUseCaseTest extends MakerTestCase
                     ]);
 
                     $this->assertStringContainsString('Success', $output);
+
+                    array_map(
+                        fn($filePath) => $this->assertFileExists($runner->getPath($filePath)), 
+                        [
+                            'src/Domain/UseCase/'. $folder .'/'.$name.'.php',
+                            'src/Domain/Request/'. $folder .'/'.$name.'Request.php',
+                            'src/Domain/Response/'. $folder .'/'.$name.'Response.php',
+                            'src/Domain/API/'. $folder .'/'.$name.'PresenterInterface.php'
+                        ]
+                    );
                 })
         ];
     }
