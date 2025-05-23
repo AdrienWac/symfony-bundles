@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
-use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\ClassFile;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
-final class UseCaseFile extends ClassFile
+final class RequestFile extends ClassFile
 {
     public const FOLDER_NAME = 'UseCase'; 
 
@@ -13,8 +14,6 @@ final class UseCaseFile extends ClassFile
         private readonly string $domainFolderPath,
         private string $folderPath,
         private string $useCaseName,
-        private readonly RequestFile $requestFile,
-        // private readonly PresenterInterfaceFile $presenterInterfaceFile
     ) {
         $this->nameSpace = $this->buildNameSpace(
             $domainFolderPath, 
@@ -25,8 +24,6 @@ final class UseCaseFile extends ClassFile
 
     public function buildUseStatement(): UseStatementGenerator
     {
-        return new UseStatementGenerator([
-            $this->requestFile->getNameSpace()
-        ]);
+        return new UseStatementGenerator([]);
     }
 }

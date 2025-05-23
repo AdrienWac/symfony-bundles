@@ -9,6 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 final class UseCaseFileTest extends TestCase
 {
+    /**
+     * Should get instance of use case file
+     * Should have built expected namespace attribute
+     */
     public function testInstanciateUseCaseFile(): void
     {
         $domainFolderPath = 'Domain';
@@ -25,5 +29,13 @@ final class UseCaseFileTest extends TestCase
             UseCaseFile::class,
             $useCaseFile
         );
+
+        $expectedUseCaseNameSpace = 'Domain\UseCase\ParentFolder\ChildFolder\Foo\Bar';
+        $this->assertEquals(
+            $expectedUseCaseNameSpace,
+            $useCaseFile->getNameSpace()
+        );
     }
+
+
 }
