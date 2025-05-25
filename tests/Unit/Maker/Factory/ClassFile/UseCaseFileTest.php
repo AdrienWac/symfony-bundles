@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AdrienLbt\HexagonalMakerBundle\Tests\Unit\Maker\Factory\ClassFile;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\UseCaseFile;
+use AdrienLbt\HexagonalMakerBundle\Tests\Factory\UseCaseFileFactory;
 use PHPUnit\Framework\TestCase;
 
 final class UseCaseFileTest extends TestCase
@@ -19,11 +20,7 @@ final class UseCaseFileTest extends TestCase
         $folderPath = 'ParentFolder/ChildFolder/Foo';
         $useCaseName = 'Bar';
 
-        $useCaseFile = new UseCaseFile(
-            $domainFolderPath,
-            $folderPath,
-            $useCaseName
-        );
+        $useCaseFile = UseCaseFileFactory::create($domainFolderPath, $folderPath, $useCaseName);
 
         $this->assertInstanceOf(
             UseCaseFile::class,
