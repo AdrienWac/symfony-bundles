@@ -6,9 +6,9 @@ namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
-final class RequestFile extends ClassFile
+final class PresenterInterfaceFile extends ClassFile
 {
-    public const FOLDER_NAME = 'Request'; 
+    public const FOLDER_NAME = 'API';
 
     public function __construct(
         private readonly string $domainFolderPath,

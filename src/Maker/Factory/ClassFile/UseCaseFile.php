@@ -23,6 +23,11 @@ final class UseCaseFile extends ClassFile
         );
     }
 
+    protected function getFolderName(): string
+    {
+        return self::FOLDER_NAME;
+    }
+
     public function buildUseStatement(): UseStatementGenerator
     {
         return new UseStatementGenerator([

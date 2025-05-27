@@ -7,11 +7,11 @@ use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
 abstract class ClassFile implements ClassFileInterface
 {
-    public const FOLDER_NAME = ''; 
-
     protected string $nameSpace;
 
     abstract public function buildUseStatement(): UseStatementGenerator;
+
+    abstract protected function getFolderName(): string;
 
     protected function buildNameSpace(
         string $domainFolderPath,
@@ -22,7 +22,7 @@ abstract class ClassFile implements ClassFileInterface
         return sprintf(
             '%s\\%s\\%s\\%s',
             $domainFolderPath,
-            self::FOLDER_NAME,
+            $this->getFolderName(),
             str_replace('/', '\\', $useCaseFolderPath),
             $useCaseName
         );
