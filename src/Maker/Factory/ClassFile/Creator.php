@@ -6,12 +6,18 @@ use AdrienLbt\HexagonalMakerBundle\Maker\Factory\CreatorInterface;
 
 final class Creator implements CreatorInterface
 {
+    private array $operations = [];
+
     public function generateUseCase(
         string $name,
         string $folderPath
     ): void
     {
-        $useCase = new UseCaseFile();
+        $requestFile = new RequestFile();
+        $presenterInterfaceFile = new PresenterInterfaceFile();
+        $useCaseFile = new UseCaseFile();
+
+        $this->addOperation($useCaseFile);
     }
 
 
@@ -20,9 +26,9 @@ final class Creator implements CreatorInterface
 
     }
 
-    public function addOperation(): void
+    public function addOperation(ClassFile $classFile): void
     {
-
+        $operations[] = $classFile;
     }
 
     public function writeChanges(): void

@@ -16,9 +16,9 @@ final class UseCaseFile extends ClassFile
         private readonly RequestFile $requestFile,
         // private readonly PresenterInterfaceFile $presenterInterfaceFile
     ) {
-        $this->nameSpace = $this->buildNameSpace(
-            $domainFolderPath, 
-            $folderPath, 
+        parent::__construct(
+            $domainFolderPath,
+            $folderPath,
             $useCaseName
         );
     }

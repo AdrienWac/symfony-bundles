@@ -15,9 +15,9 @@ final class RequestFile extends ClassFile
         private string $folderPath,
         private string $useCaseName,
     ) {
-        $this->nameSpace = $this->buildNameSpace(
-            $domainFolderPath, 
-            $folderPath, 
+        parent::__construct(
+            $domainFolderPath,
+            $folderPath,
             $useCaseName
         );
     }

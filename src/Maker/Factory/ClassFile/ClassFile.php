@@ -9,6 +9,19 @@ abstract class ClassFile implements ClassFileInterface
 {
     protected string $nameSpace;
 
+    public function __construct(
+        private readonly string $domainFolderPath,
+        private string $folderPath,
+        private string $useCaseName,
+    ) 
+    {
+        $this->nameSpace = $this->buildNameSpace(
+            $domainFolderPath, 
+            $folderPath, 
+            $useCaseName
+        );
+    }
+
     abstract public function buildUseStatement(): UseStatementGenerator;
 
     abstract protected function getFolderName(): string;
