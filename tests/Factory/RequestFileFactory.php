@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AdrienLbt\HexagonalMakerBundle\Tests\Traits;
+namespace AdrienLbt\HexagonalMakerBundle\Tests\Factory;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\RequestFile;
 use AdrienLbt\HexagonalMakerBundle\Tests\Factory\FactoryInterface;

@@ -6,7 +6,7 @@ namespace AdrienLbt\HexagonalMakerBundle\Tests\Factory;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\RequestFile;
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\UseCaseFile;
-use AdrienLbt\HexagonalMakerBundle\Tests\Traits\RequestFileFactory;
+use AdrienLbt\HexagonalMakerBundle\Tests\Factory\RequestFileFactory;
 
 final class UseCaseFileFactory implements FactoryInterface
 {

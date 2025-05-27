@@ -28,6 +28,7 @@ final class UseCaseFileTest extends TestCase
         );
 
         $expectedUseCaseNameSpace = 'Domain\UseCase\ParentFolder\ChildFolder\Foo\Bar';
+        
         $this->assertEquals(
             $expectedUseCaseNameSpace,
             $useCaseFile->getNameSpace()
