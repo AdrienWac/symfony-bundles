@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
-use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
-
 final class RequestFile extends ClassFile
 {
     public const FOLDER_NAME = 'Request'; 
+
+    public const SUFFIX_FILE = 'Request';
+
+    public const TEMPLATE_PATH = '/Request.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,
@@ -22,13 +24,23 @@ final class RequestFile extends ClassFile
         );
     }
 
+    public function getClassName(): string 
+    {
+        return sprintf('%s%s', $this->useCaseName, self::SUFFIX_FILE);
+    }
+
     protected function getFolderName(): string
     {
         return self::FOLDER_NAME;
     }
 
-    public function buildUseStatement(): UseStatementGenerator
+    protected function getTemplatePath(): string
     {
-        return new UseStatementGenerator([]);
+        return self::TEMPLATE_PATH;
+    }
+
+    public function buildUseStatementArray(): array
+    {
+        return [];
     }
 }

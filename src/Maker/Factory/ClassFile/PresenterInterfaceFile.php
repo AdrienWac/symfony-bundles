@@ -10,6 +10,8 @@ final class PresenterInterfaceFile extends ClassFile
 {
     public const FOLDER_NAME = 'API';
 
+    public const TEMPLATE_PATH = '/PresenterInterface.tpl.php';
+
     public function __construct(
         private readonly string $domainFolderPath,
         private string $folderPath,
@@ -22,13 +24,36 @@ final class PresenterInterfaceFile extends ClassFile
         );
     }
 
+    protected function buildFullClassName (
+        $domainFolderPath,
+        $classFileFolderPathFromUser
+    ): string 
+    {
+        return sprintf(
+            '%s\\%s\\%s',
+            $domainFolderPath,
+            $this->getFolderName(),
+            $this->getClassName()
+        );
+    }
+
     protected function getFolderName(): string
     {
         return self::FOLDER_NAME;
     }
 
-    public function buildUseStatement(): UseStatementGenerator
+    protected function getTemplatePath(): string
     {
-        return new UseStatementGenerator([]);
+        return self::TEMPLATE_PATH;
+    }
+
+    public function getClassName(): string 
+    {
+        return 'PresenterInterface';
+    }
+
+    public function buildUseStatementArray(): array
+    {
+        return [];
     }
 }

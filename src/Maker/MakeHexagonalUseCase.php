@@ -58,7 +58,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        $creator = new Creator();
+        // $creator = new Creator($this->file);
 
         
         $useCaseName = $input->getArgument('name');
@@ -67,10 +67,11 @@ final class MakeHexagonalUseCase extends AbstractMaker
             $input->getArgument('folder_path')
         );
 
-        $creator->generateUseCase(
-            name: $useCaseName,
-            folderPath: $useCaseFolderPath
-        );
+        // $creator->generateUseCase(
+        //     name: $useCaseName,
+        //     folderPath: $useCaseFolderPath,
+        //     domainPath: $this->domainPath
+        // );
 
         $useCaseNameSpace = sprintf(
             '%s\\UseCase\\%s\\%s',

@@ -27,11 +27,32 @@ final class UseCaseFileTest extends TestCase
             $useCaseFile
         );
 
-        $expectedUseCaseNameSpace = 'Domain\UseCase\ParentFolder\ChildFolder\Foo\Bar';
+        $expectedFullClassName = 'Domain\UseCase\ParentFolder\ChildFolder\Foo\Bar';
+        $expectedUseCaseNameSpace = 'Domain\UseCase\ParentFolder\ChildFolder\Foo';
+        $expectedShortClassName = 'Bar';
+        $expectedUseStatementArray = [
+            'Domain\Request\ParentFolder\ChildFolder\Foo\BarRequest',
+            'Domain\API\PresenterInterface'
+        ];
         
         $this->assertEquals(
             $expectedUseCaseNameSpace,
             $useCaseFile->getNameSpace()
+        );
+
+        $this->assertEquals(
+            $expectedShortClassName,
+            $useCaseFile->getClassName()
+        );
+
+        $this->assertEquals(
+            $expectedFullClassName,
+            $useCaseFile->getFullClassName()
+        );
+
+        $this->assertEquals(
+            $expectedUseStatementArray,
+            $useCaseFile->getUseStatementArray()
         );
     }
 

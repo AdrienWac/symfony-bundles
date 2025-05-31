@@ -3,18 +3,19 @@
 namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\ClassFile;
-use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
 final class UseCaseFile extends ClassFile
 {
-    public const FOLDER_NAME = 'UseCase'; 
+    public const FOLDER_NAME = 'UseCase';
+
+    public const TEMPLATE_PATH = '/UseCase.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,
-        private string $folderPath,
-        private string $useCaseName,
+        private readonly string $folderPath,
+        private readonly string $useCaseName,
         private readonly RequestFile $requestFile,
-        // private readonly PresenterInterfaceFile $presenterInterfaceFile
+        private readonly PresenterInterfaceFile $presenterInterfaceFile
     ) {
         parent::__construct(
             $domainFolderPath,
@@ -28,10 +29,21 @@ final class UseCaseFile extends ClassFile
         return self::FOLDER_NAME;
     }
 
-    public function buildUseStatement(): UseStatementGenerator
+    protected function getTemplatePath(): string
     {
-        return new UseStatementGenerator([
-            $this->requestFile->getNameSpace()
-        ]);
+        return self::TEMPLATE_PATH;
+    }
+
+    public function buildUseStatementArray(): array
+    {
+        return [
+            $this->requestFile->getFullClassName(),
+            $this->presenterInterfaceFile->getFullClassName()
+        ];
+    }
+
+    public function getClassName(): string 
+    {
+        return $this->useCaseName;
     }
 }
