@@ -32,7 +32,7 @@ final class UseCaseFileTest extends TestCase
         $expectedShortClassName = 'Bar';
         $expectedUseStatementArray = [
             'Domain\Request\ParentFolder\ChildFolder\Foo\BarRequest',
-            'Domain\API\PresenterInterface'
+            'Domain\API\ParentFolder\ChildFolder\Foo\BarPresenterInterface'
         ];
         
         $this->assertEquals(

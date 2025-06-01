@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace AdrienLbt\HexagonalMakerBundle\Tests\Unit\Maker\Factory\ClassFile;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\RequestFile;
-use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\UseCaseFile;
 use AdrienLbt\HexagonalMakerBundle\Tests\Factory\RequestFileFactory;
-use AdrienLbt\HexagonalMakerBundle\Tests\Factory\UseCaseFileFactory;
 use PHPUnit\Framework\TestCase;
 
 final class RequestFileTest extends TestCase

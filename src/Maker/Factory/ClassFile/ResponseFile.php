@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
-use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
-
-final class PresenterInterfaceFile extends ClassFile
+final class ResponseFile extends ClassFile
 {
-    public const FOLDER_NAME = 'API';
+    public const FOLDER_NAME = 'Response'; 
 
-    public const SUFFIX_FILE = 'PresenterInterface';
+    public const SUFFIX_FILE = 'Response';
 
-    public const TEMPLATE_PATH = '/PresenterInterface.tpl.php';
+    public const TEMPLATE_PATH = '/Response.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,
         private string $folderPath,
-        private string $useCaseName,
-        private readonly ResponseFile $responseFile
+        private string $useCaseName
     ) {
         parent::__construct(
             $domainFolderPath,
             $folderPath,
             $useCaseName
         );
+    }
+
+    public function getClassName(): string 
+    {
+        return sprintf('%s%s', $this->useCaseName, self::SUFFIX_FILE);
     }
 
     protected function getFolderName(): string
@@ -37,19 +39,8 @@ final class PresenterInterfaceFile extends ClassFile
         return self::TEMPLATE_PATH;
     }
 
-    public function getClassName(): string 
-    {
-        return sprintf(
-            '%s%s', 
-            $this->useCaseName, 
-            self::SUFFIX_FILE
-        );
-    }
-
     public function buildUseStatementArray(): array
     {
-        return [
-            $this->responseFile->getFullClassName()
-        ];
+        return [];
     }
 }
