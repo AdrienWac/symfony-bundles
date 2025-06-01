@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
+use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
+
 final class RequestFile extends ClassFile
 {
     public const FOLDER_NAME = 'Request'; 
@@ -42,5 +44,14 @@ final class RequestFile extends ClassFile
     public function buildUseStatementArray(): array
     {
         return [];
+    }
+
+    public function getTemplateVariables(): array
+    {
+        return [
+            'class_name' => $this->getClassName(),
+            'namespace' => $this->getNameSpace(),
+            'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
+        ];
     }
 }

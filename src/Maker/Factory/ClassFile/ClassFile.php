@@ -16,12 +16,16 @@ abstract class ClassFile implements ClassFileInterface
 
     protected array $useStatementArray;
 
+    protected string $targetPath;
+
     public function __construct(
         private readonly string $domainFolderPath,
         private string $folderPath,
         private string $classFileName
     ) 
     {
+        $this->checkTemplateExist();
+
         $this->fullClassName = $this->buildFullClassName(
             $domainFolderPath,
             $folderPath
@@ -39,6 +43,8 @@ abstract class ClassFile implements ClassFileInterface
     abstract protected function getTemplatePath(): string;
 
     abstract public function getClassName(): string;
+
+    abstract public function getTemplateVariables(): array;
 
     /**
      * @return string
@@ -86,5 +92,43 @@ abstract class ClassFile implements ClassFileInterface
     public function getUseStatementArray(): array
     {
         return $this->useStatementArray;
+    }
+
+    public function setTargetPath(string $targetPath): void
+    {
+        $this->targetPath = $targetPath;
+    }
+
+    public function getTargetPath(): string
+    {
+        return $this->targetPath;
+    }
+
+    public function getFullTemplatePath(): string
+    {
+        return sprintf(
+            '%s/%s/%s', 
+            dirname(__DIR__), 
+            Creator::TEMPLATE_FOLDER_PATH, 
+            $this->getTemplatePath()
+        );
+    }
+
+    /**
+     * Check if template of ClassFile instance exist
+     * @throws Exception If template not exist
+     */
+    private function checkTemplateExist(): void
+    {
+        $templatePath = \sprintf(
+            '%s/%s/%s', 
+            \dirname(__DIR__), 
+            Creator::TEMPLATE_FOLDER_PATH, 
+            $this->getTemplatePath()
+        );
+
+        if (!file_exists($templatePath)) {
+            throw new \Exception(\sprintf('Cannot find template "%s" in the templates/ dir.', $templatePath));
+        }
     }
 }

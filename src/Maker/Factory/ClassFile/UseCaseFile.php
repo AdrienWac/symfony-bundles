@@ -3,6 +3,7 @@
 namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\ClassFile;
+use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 
 final class UseCaseFile extends ClassFile
 {
@@ -45,5 +46,14 @@ final class UseCaseFile extends ClassFile
     public function getClassName(): string 
     {
         return $this->useCaseName;
+    }
+
+    public function getTemplateVariables(): array
+    {
+        return [
+            'class_name' => $this->getClassName(),
+            'namespace' => $this->getNameSpace(),
+            'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
+        ];
     }
 }

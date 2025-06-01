@@ -11,6 +11,8 @@ final class Creator implements CreatorInterface
 
     private array $elementsList = [];
 
+    public const TEMPLATE_FOLDER_PATH = 'templates';
+
     public function __construct(private FileManager $fileManager)
     {}
 
@@ -39,6 +41,8 @@ final class Creator implements CreatorInterface
     {
         $requestFile = new RequestFile($domainPath, $folderPath, $name);
 
+        $this->setTargetPath($requestFile);
+
         $this->elementsList[RequestFile::class] = $requestFile;
 
         return $requestFile;
@@ -51,6 +55,8 @@ final class Creator implements CreatorInterface
     ): ResponseFile
     {
         $responseFile = new ResponseFile($domainPath, $folderPath, $name);
+
+        $this->setTargetPath($responseFile);
 
         $this->elementsList[ResponseFile::class] = $responseFile;
 
@@ -65,6 +71,8 @@ final class Creator implements CreatorInterface
     ): PresenterInterfaceFile
     {
         $presenterInterfaceFile = new PresenterInterfaceFile($domainPath, $folderPath, $name, $responseFile);
+
+        $this->setTargetPath($presenterInterfaceFile);
 
         $this->elementsList[PresenterInterfaceFile::class] = $presenterInterfaceFile;
 
@@ -81,9 +89,26 @@ final class Creator implements CreatorInterface
     {
         $useCaseFile = new UseCaseFile($domainPath, $folderPath, $name, $requestFile, $presenterInterfaceFile);
 
+        $this->setTargetPath($useCaseFile);
+
         $this->elementsList[UseCaseFile::class] = $presenterInterfaceFile;
 
         return $useCaseFile;
+    }
+
+    /**
+     * Edit targetPath attribute value of ClasseFile instance
+     * with FileManager method.
+     *
+     * @todo Use event dispatch in ClassFile constructor to do that 
+     * @param ClassFile $classFile
+     * @return void
+     */
+    private function setTargetPath(ClassFile $classFile): void
+    {
+        $targetPath = $this->fileManager->getRelativePathForFutureClass($classFile->getFullClassName());
+
+        $classFile->setTargetPath($targetPath);
     }
 
     public function generate(): void
@@ -93,16 +118,48 @@ final class Creator implements CreatorInterface
 
     public function addOperation(ClassFile $classFile): void
     {
+        if ($this->fileManager->fileExists($classFile->getTargetPath())) {
+            throw new \Exception(
+                \sprintf(
+                    'The file "%s" can\'t be generated because it already exists.',
+                    $this->fileManager->relativizePath($classFile->getTargetPath())
+                )
+            );
+        }
+
         $this->operationsList[] = $classFile;
     }
 
     public function writeChanges(): void
     {
-        foreach ($this->operationsList as $key => $operation) {
-            # code...
+        foreach ($this->operationsList as $classFile) {
+            $this->fileManager->dumpFile(
+                $classFile->getTargetPath(),
+                $this->getFileContentsForOperation($classFile)
+            );
         }
         
         $this->resetList();
+    }
+
+    /**
+     * Get content of template with hydrated template variables
+     *
+     * @param ClassFile $classFile
+     * @return string
+     */
+    private function getFileContentsForOperation(ClassFile $classFile): string
+    {
+        $parameters = $classFile->getTemplateVariables();
+
+        $templateParameters = array_merge($parameters, [
+            'relative_path' => $this->fileManager->relativizePath($classFile->getTargetPath())
+        ]);
+
+        return $this->fileManager->parseTemplate(
+            $classFile->getFullTemplatePath(), 
+            $templateParameters
+        );
     }
 
     private function resetList(): void

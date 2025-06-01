@@ -52,4 +52,13 @@ final class PresenterInterfaceFile extends ClassFile
             $this->responseFile->getFullClassName()
         ];
     }
+
+    public function getTemplateVariables(): array
+    {
+        return [
+            'class_name' => $this->getClassName(),
+            'namespace' => $this->getNameSpace(),
+            'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
+        ];
+    }
 }
