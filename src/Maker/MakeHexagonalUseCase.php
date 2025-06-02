@@ -7,6 +7,7 @@ use AdrienLbt\HexagonalMakerBundle\Maker\MakeTrait;
 use Symfony\Bundle\MakerBundle\Maker\Common\UidTrait;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
@@ -21,7 +22,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
     use UidTrait;
     use MakeTrait;
 
-    public function __construct(private string $domainPath)
+    public function __construct(private string $domainPath, private FileManager $fileManager)
     {
     }
 
@@ -58,7 +59,7 @@ final class MakeHexagonalUseCase extends AbstractMaker
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        // $creator = new Creator($this->file);
+        $creator = new Creator($this->fileManager);
 
         
         $useCaseName = $input->getArgument('name');
@@ -67,11 +68,11 @@ final class MakeHexagonalUseCase extends AbstractMaker
             $input->getArgument('folder_path')
         );
 
-        // $creator->generateUseCase(
-        //     name: $useCaseName,
-        //     folderPath: $useCaseFolderPath,
-        //     domainPath: $this->domainPath
-        // );
+        $creator->generateUseCase(
+            name: $useCaseName,
+            folderPath: $useCaseFolderPath,
+            domainPath: $this->domainPath
+        );
 
         $useCaseNameSpace = sprintf(
             '%s\\UseCase\\%s\\%s',
