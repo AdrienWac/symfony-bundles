@@ -12,7 +12,7 @@ final class ResponseFile extends ClassFile
 
     public const SUFFIX_FILE = 'Response';
 
-    public const TEMPLATE_PATH = '/Response.tpl.php';
+    public const TEMPLATE_PATH = 'Response.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,

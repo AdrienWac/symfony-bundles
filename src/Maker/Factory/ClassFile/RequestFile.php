@@ -12,7 +12,7 @@ final class RequestFile extends ClassFile
 
     public const SUFFIX_FILE = 'Request';
 
-    public const TEMPLATE_PATH = '/Request.tpl.php';
+    public const TEMPLATE_PATH = 'Request.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,

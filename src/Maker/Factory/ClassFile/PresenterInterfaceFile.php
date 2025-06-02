@@ -12,7 +12,7 @@ final class PresenterInterfaceFile extends ClassFile
 
     public const SUFFIX_FILE = 'PresenterInterface';
 
-    public const TEMPLATE_PATH = '/PresenterInterface.tpl.php';
+    public const TEMPLATE_PATH = 'PresenterInterface.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,

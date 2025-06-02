@@ -121,8 +121,10 @@ abstract class ClassFile implements ClassFileInterface
     private function checkTemplateExist(): void
     {
         $templatePath = \sprintf(
-            '%s/%s/%s', 
-            \dirname(__DIR__), 
+            '%s/%s/%s/%s/%s', 
+            $_SERVER["WORKDIR_PATH"], 
+            'src',
+            'Maker',
             Creator::TEMPLATE_FOLDER_PATH, 
             $this->getTemplatePath()
         );
