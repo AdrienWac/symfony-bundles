@@ -16,6 +16,11 @@ final class Creator implements CreatorInterface
     public function __construct(private FileManager $fileManager)
     {}
 
+    public function getOperationsList(): array
+    {
+        return $this->operationsList;
+    }
+
     public function generateUseCase(
         string $name,
         string $folderPath,
@@ -34,9 +39,9 @@ final class Creator implements CreatorInterface
     }
 
     private function buildRequestFile(
-        string $name,
+        string $domainPath,
         string $folderPath,
-        string $domainPath
+        string $name
     ): RequestFile
     {
         $requestFile = new RequestFile($domainPath, $folderPath, $name);
@@ -49,9 +54,9 @@ final class Creator implements CreatorInterface
     }
 
     private function buildResponseFile(
-        string $name,
+        string $domainPath,
         string $folderPath,
-        string $domainPath
+        string $name
     ): ResponseFile
     {
         $responseFile = new ResponseFile($domainPath, $folderPath, $name);
@@ -64,9 +69,9 @@ final class Creator implements CreatorInterface
     }
 
     private function buildPresenterInterfaceFile(
-        string $name,
-        string $folderPath,
         string $domainPath,
+        string $folderPath,
+        string $name,
         ResponseFile $responseFile
     ): PresenterInterfaceFile
     {
@@ -80,9 +85,9 @@ final class Creator implements CreatorInterface
     }
 
     private function buildUseCaseFile(
-        string $name,
-        string $folderPath,
         string $domainPath,
+        string $folderPath,
+        string $name,
         RequestFile $requestFile, 
         PresenterInterfaceFile $presenterInterfaceFile
     ): UseCaseFile

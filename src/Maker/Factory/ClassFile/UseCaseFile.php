@@ -9,7 +9,7 @@ final class UseCaseFile extends ClassFile
 {
     public const FOLDER_NAME = 'UseCase';
 
-    public const TEMPLATE_PATH = '/UseCase.tpl.php';
+    public const TEMPLATE_PATH = 'UseCase.tpl.php';
 
     public function __construct(
         private readonly string $domainFolderPath,

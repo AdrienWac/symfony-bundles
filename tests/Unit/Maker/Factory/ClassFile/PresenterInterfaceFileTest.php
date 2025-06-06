@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace AdrienLbt\HexagonalMakerBundle\Tests\Unit\Maker\Factory\ClassFile;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\PresenterInterfaceFile;
-use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\RequestFile;
 use AdrienLbt\HexagonalMakerBundle\Tests\Factory\PresenterInterfaceFileFactory;
-use AdrienLbt\HexagonalMakerBundle\Tests\Factory\RequestFileFactory;
 use PHPUnit\Framework\TestCase;
 
 final class PresenterInterfaceFileTest extends TestCase
