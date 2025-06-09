@@ -65,4 +65,68 @@ class CreatorTest extends TestCase
             ''
         );
     }
+
+    /**
+     * Should add ResponseFile instance in operations and elements list
+     * @return void
+     */
+    public function testGenerateResponse(): void
+    {
+        $this->fileManager
+            ->method('getRelativePathForFutureClass')
+            ->willReturn('/var/www/html/src/Domain/Bar/Foo.php');
+
+        $creator = CreatorFactory::create($this->fileManager);
+
+        $this->assertEmpty($creator->getOperationsList());
+        $this->assertEmpty($creator->getElementsList());
+
+        $domainFolder = 'Domain';
+        $folderPath = 'Bar';
+        $useCaseName = 'Foo';
+
+        $creator->generateResponse($useCaseName, $folderPath, $domainFolder);
+
+        $this->assertContainsOnlyInstancesOf(ResponseFile::class, $creator->getOperationsList());
+        $this->assertContainsOnlyInstancesOf(ResponseFile::class, $creator->getElementsList());
+    }
+
+    /**
+     * Create use case and response file, then check if 
+     * response file in elements list before create response file
+     * in the same as after create response file. 
+     * @todo Use a partial mock ?
+     * @return void
+     */
+    public function testGenerateResponseWithExistingInElementsList(): void
+    {
+        $this->fileManager
+            ->method('getRelativePathForFutureClass')
+            ->willReturn('/var/www/html/src/Domain/Bar/Foo.php');
+
+        $creator = CreatorFactory::create($this->fileManager);
+
+        $domainFolder = 'Domain';
+        $folderPath = 'Bar';
+        $useCaseName = 'Foo';
+
+        $creator->generateUseCase($useCaseName, $folderPath, $domainFolder);
+
+        $responseFileInstanceBeforeResponseCreation = $creator->getInstanceOf(
+            $creator->getElementsList(), 
+            ResponseFile::class
+        );
+
+        $creator->generateResponse($useCaseName, $folderPath, $domainFolder);
+
+        $responseFileInstanceAfterResponseCreation = $creator->getInstanceOf(
+            $creator->getElementsList(), 
+            ResponseFile::class
+        );
+
+        $this->assertEquals(
+            $responseFileInstanceBeforeResponseCreation, 
+            $responseFileInstanceAfterResponseCreation
+        );
+    }
 }

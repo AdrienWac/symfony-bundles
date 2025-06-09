@@ -43,6 +43,34 @@ final class Creator implements CreatorInterface
         $this->addOperation($useCaseFile);
     }
 
+    public function generateResponse(
+        string $name,
+        string $folderPath,
+        string $domainPath
+    ): void
+    {
+        $existingResponse = $this->getInstanceOf($this->elementsList, ResponseFile::class);
+
+        if (!is_null($existingResponse)) {
+            $this->addOperation($existingResponse);
+        }
+
+        $responseFile = $this->buildResponseFile($domainPath, $folderPath, $name);
+
+        $this->addOperation($responseFile);
+    }
+
+    public function getInstanceOf(array $haystack, string $expectedInstanceOf): mixed
+    {
+        foreach ($haystack as $element) {
+            if ($element instanceof $expectedInstanceOf) {
+                return $element;
+            }
+        }
+
+        return null;
+    }
+
     private function buildRequestFile(
         string $domainPath,
         string $folderPath,
