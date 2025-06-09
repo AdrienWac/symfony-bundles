@@ -21,6 +21,11 @@ final class Creator implements CreatorInterface
         return $this->operationsList;
     }
 
+    public function getElementsList(): array
+    {
+        return $this->elementsList;
+    }
+
     public function generateUseCase(
         string $name,
         string $folderPath,
