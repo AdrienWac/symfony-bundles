@@ -10,7 +10,6 @@
          failOnIncomplete="true"
          failOnRisky="true"
          failOnWarning="true"
-         displayDetailsOnPhpunitDeprecations="false"
 >
     <php>
         <ini name="display_errors" value="1" />

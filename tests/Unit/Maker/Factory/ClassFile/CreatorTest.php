@@ -33,8 +33,6 @@ class CreatorTest extends TestCase
     /**
      * Should have expected element in operationsList attribute
      * Should have expected elements in elementsList attribute
-     *
-     * @return void
      */
     public function testGenerateUseCase(): void
     {
@@ -68,7 +66,6 @@ class CreatorTest extends TestCase
 
     /**
      * Should add ResponseFile instance in operations and elements list
-     * @return void
      */
     public function testGenerateResponse(): void
     {
@@ -92,13 +89,61 @@ class CreatorTest extends TestCase
     }
 
     /**
-     * Create use case and response file, then check if 
-     * response file in elements list before create response file
-     * in the same as after create response file. 
-     * @todo Use a partial mock ?
-     * @return void
+     * Should create an PresenterInterfaceFile instance and then add it in operationList
      */
-    public function testGenerateResponseWithExistingInElementsList(): void
+    public function testGeneratePresenterInterface(): void
+    {
+        $this->fileManager
+            ->method('getRelativePathForFutureClass')
+            ->willReturn('/var/www/html/src/Domain/Bar/Foo.php');
+
+        $creator = CreatorFactory::create($this->fileManager);
+
+        $domainFolder = 'Domain';
+        $folderPath = 'Bar';
+        $useCaseName = 'Foo';
+
+        $creator->generateResponse($useCaseName, $folderPath, $domainFolder);
+        $creator->generatePresenterInterface($useCaseName, $folderPath, $domainFolder);
+        
+        $expectedInstanceInElementList = [
+            ResponseFile::class, 
+            PresenterInterfaceFile::class
+        ];
+
+        static::assertThat(
+            $creator->getElementsList(),
+            new TraversableContainsInstanceOf($expectedInstanceInElementList),
+            ''
+        );
+    }
+
+    /**
+     * Should throw an exception
+     */
+    public function testGeneratePresenterInterfaceWithMissingResponseFile(): void
+    {
+        $this->fileManager
+            ->method('getRelativePathForFutureClass')
+            ->willReturn('/var/www/html/src/Domain/Bar/Foo.php');
+
+        $creator = CreatorFactory::create($this->fileManager);
+
+        $domainFolder = 'Domain';
+        $folderPath = 'Bar';
+        $useCaseName = 'Foo';
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(sprintf("Unable to create %s. Missing %s", PresenterInterfaceFile::class, ResponseFile::class));
+
+        $creator->generatePresenterInterface($useCaseName, $folderPath, $domainFolder);
+    }
+
+    /**
+     * @dataProvider dataProviderGenerateInstanceFileWithExistingElement
+     * Should add ClassFile instance from elementList in operationList
+     */
+    public function testGeneratePresenterInterfaceWithExistingInElementList(string $className, string $methodName): void
     {
         $this->fileManager
             ->method('getRelativePathForFutureClass')
@@ -112,21 +157,39 @@ class CreatorTest extends TestCase
 
         $creator->generateUseCase($useCaseName, $folderPath, $domainFolder);
 
-        $responseFileInstanceBeforeResponseCreation = $creator->getInstanceOf(
+        $fileInstanceBeforeResponseCreation = $creator->getInstanceOf(
             $creator->getElementsList(), 
-            ResponseFile::class
+            $className
         );
 
-        $creator->generateResponse($useCaseName, $folderPath, $domainFolder);
+        $creator->$methodName($useCaseName, $folderPath, $domainFolder);
 
-        $responseFileInstanceAfterResponseCreation = $creator->getInstanceOf(
+        $fileInstanceAfterResponseCreation = $creator->getInstanceOf(
             $creator->getElementsList(), 
-            ResponseFile::class
+            $className
         );
 
-        $this->assertEquals(
-            $responseFileInstanceBeforeResponseCreation, 
-            $responseFileInstanceAfterResponseCreation
-        );
+        $this->assertEquals($fileInstanceBeforeResponseCreation, $fileInstanceAfterResponseCreation);
     }
+
+    /**
+     * Provides class and method name to test that creating an existing ClassFile instance in 
+     * elementList doesn't restart creation
+     *
+     * @return \Generator
+     */
+    public static function dataProviderGenerateInstanceFileWithExistingElement(): \Generator
+    {
+        yield [
+            PresenterInterfaceFile::class,
+            'generatePresenterInterface',    
+        ];
+
+        yield [
+            ResponseFile::class,
+            'generateResponse'
+        ];
+    }
+
+    
 }

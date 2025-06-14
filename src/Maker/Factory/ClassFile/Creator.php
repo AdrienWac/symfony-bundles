@@ -60,6 +60,32 @@ final class Creator implements CreatorInterface
         $this->addOperation($responseFile);
     }
 
+    public function generatePresenterInterface(
+        string $name,
+        string $folderPath,
+        string $domainPath
+    ): void
+    {
+        $existingPresenterInterface = $this->getInstanceOf($this->elementsList, PresenterInterfaceFile::class);
+
+        if (!is_null($existingPresenterInterface)) {
+            $this->addOperation($existingPresenterInterface);
+        }
+
+        $responseFile = $this->getInstanceOf($this->elementsList, ResponseFile::class);
+
+        if (is_null($responseFile)) {
+            throw new \Exception(
+                sprintf("Unable to create %s. Missing %s", PresenterInterfaceFile::class, ResponseFile::class), 
+                1
+            );
+        }
+
+        $presenterInterfaceFile = $this->buildPresenterInterfaceFile($domainPath, $folderPath, $name, $responseFile);
+
+        $this->addOperation($presenterInterfaceFile);
+    }
+
     public function getInstanceOf(array $haystack, string $expectedInstanceOf): mixed
     {
         foreach ($haystack as $element) {
