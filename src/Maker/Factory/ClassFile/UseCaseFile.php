@@ -56,4 +56,9 @@ final class UseCaseFile extends ClassFile
             'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
         ];
     }
+
+    public static function getUserQuestion(): string
+    {
+        return '';
+    }
 }

@@ -46,6 +46,8 @@ abstract class ClassFile implements ClassFileInterface
 
     abstract public function getTemplateVariables(): array;
 
+    abstract public static function getUserQuestion(): string;
+
     /**
      * @return string
      * @example
