@@ -54,4 +54,12 @@ final class RequestFile extends ClassFile
             'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
         ];
     }
+
+    public static function getUserQuestion(?string $useCaseName = null): string
+    {
+        return sprintf(
+            'Would you like to create the request file for use case %s ?',
+            $useCaseName
+        );
+    }
 }

@@ -86,6 +86,23 @@ final class Creator implements CreatorInterface
         $this->addOperation($presenterInterfaceFile);
     }
 
+    public function generateRequest(
+        string $name,
+        string $folderPath,
+        string $domainPath
+    ): void
+    {
+        $existingRequest = $this->getInstanceOf($this->elementsList, RequestFile::class);
+
+        if (!is_null($existingRequest)) {
+            $this->addOperation($existingRequest);
+        }
+
+        $requestFile = $this->buildRequestFile($domainPath, $folderPath, $name);
+
+        $this->addOperation($requestFile);
+    }
+
     public function getInstanceOf(array $haystack, string $expectedInstanceOf): mixed
     {
         foreach ($haystack as $element) {

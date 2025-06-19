@@ -5,7 +5,7 @@ namespace AdrienLbt\HexagonalMakerBundle\Maker\Handler;
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\Creator;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 
-abstract class AbstractHandler
+abstract class AbstractHandler implements HandlerInterface
 {
     protected ?HandlerInterface $next = null;
 

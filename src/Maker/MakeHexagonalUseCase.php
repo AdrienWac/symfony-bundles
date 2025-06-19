@@ -3,6 +3,10 @@
 namespace AdrienLbt\HexagonalMakerBundle\Maker;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile\Creator;
+use AdrienLbt\HexagonalMakerBundle\Maker\Handler\PresenterInterfaceHandler;
+use AdrienLbt\HexagonalMakerBundle\Maker\Handler\RequestHandler;
+use AdrienLbt\HexagonalMakerBundle\Maker\Handler\ResponseHandler;
+use AdrienLbt\HexagonalMakerBundle\Maker\Handler\UseCaseHandler;
 use AdrienLbt\HexagonalMakerBundle\Maker\MakeTrait;
 use Symfony\Bundle\MakerBundle\Maker\Common\UidTrait;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
@@ -22,7 +26,10 @@ final class MakeHexagonalUseCase extends AbstractMaker
     use UidTrait;
     use MakeTrait;
 
-    public function __construct(private string $domainPath, private FileManager $fileManager)
+    public function __construct(
+        private string $domainPath, 
+        private FileManager $fileManager
+    )
     {
     }
 
@@ -58,80 +65,30 @@ final class MakeHexagonalUseCase extends AbstractMaker
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
-    {
-        $creator = new Creator($this->fileManager);
-
-        
+    {   
         $useCaseName = $input->getArgument('name');
         
         $useCaseFolderPath = $this->sanitizeFolderPath(
             $input->getArgument('folder_path')
         );
 
-        $creator->generateUseCase(
-            name: $useCaseName,
-            folderPath: $useCaseFolderPath,
-            domainPath: $this->domainPath
-        );
+        $creator = new Creator($this->fileManager);
+        
+        $useCaseHandler = new UseCaseHandler($creator, $io);
+        $responseHandler = new ResponseHandler($creator, $io);
+        $presenterInterfaceHandler = new PresenterInterfaceHandler($creator, $io);
+        $requestHandler = new RequestHandler($creator, $io);
 
-        $useCaseNameSpace = sprintf(
-            '%s\\UseCase\\%s\\%s',
-            $this->domainPath,
-            str_replace('/', '\\', $useCaseFolderPath),
-            $useCaseName
-        );
+        $useCaseHandler->setNext($responseHandler);
+        $responseHandler->setNext($presenterInterfaceHandler);
+        $presenterInterfaceHandler->setNext($requestHandler);
 
-        $requestNameSpace = sprintf(
-            '%s\\Request\\%s\\%sRequest',
-            $this->domainPath,
-            str_replace('/', '\\', $useCaseFolderPath),
-            $useCaseName
-        );
-        $presenterInterfaceNameSpace = sprintf('%s\\API\\PresenterInterface', $this->domainPath);
-
-        // @todo Useless ? 
-        $generator->createClassNameDetails(
-            name: $useCaseName,
-            namespacePrefix: 'Domain\\UseCase\\',
-            suffix: 'UseCase'
-        );
-
-        $useStatements = new UseStatementGenerator([
-            $requestNameSpace,
-            $presenterInterfaceNameSpace
+        // @todo Improve creation of handler request
+        $useCaseHandler->handleRequest([
+            'useCaseName' => $useCaseName,
+            'useCaseFolderPath' => $useCaseFolderPath,
+            'domainPath' => $this->domainPath
         ]);
-
-        $generator->generateClass(
-            className: $useCaseNameSpace,
-            templateName: __DIR__ .  '/templates/UseCase.tpl.php',
-            variables: [
-                "use_statements" => $useStatements,
-            ]
-        );
-
-        $generator->writeChanges();
-
-        $this->askForCreateResponseFile(
-            $useCaseName,
-            $useCaseFolderPath,
-            $io,
-            $generator
-        );
-
-        $this->askForCreatePresenterInterfaceFile(
-            $useCaseName,
-            $useCaseFolderPath,
-            $io,
-            $generator
-        );
-
-        $this->askForCreateRequestFile(
-            $useCaseName,
-            $useCaseFolderPath,
-            $input,
-            $io,
-            $generator
-        );
 
         $this->writeSuccessMessage($io);
     }
