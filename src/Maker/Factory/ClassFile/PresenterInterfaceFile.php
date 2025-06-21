@@ -61,4 +61,12 @@ final class PresenterInterfaceFile extends ClassFile
             'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
         ];
     }
+
+    public static function getUserQuestion(?string $useCaseName = null): string
+    {
+        return sprintf(
+            'Would you like to create the presenter interface file for use case %s ?',
+            $useCaseName
+        );
+    }
 }

@@ -90,6 +90,8 @@ final class MakeHexagonalUseCase extends AbstractMaker
             'domainPath' => $this->domainPath
         ]);
 
+        $creator->writeChanges();
+
         $this->writeSuccessMessage($io);
     }
 

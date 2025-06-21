@@ -108,9 +108,11 @@ abstract class ClassFile implements ClassFileInterface
 
     public function getFullTemplatePath(): string
     {
-        return sprintf(
-            '%s/%s/%s', 
-            dirname(__DIR__), 
+        return \sprintf(
+            '%s/%s/%s/%s/%s', 
+            $_SERVER["WORKDIR_PATH"], 
+            'src',
+            'Maker',
             Creator::TEMPLATE_FOLDER_PATH, 
             $this->getTemplatePath()
         );
@@ -122,14 +124,7 @@ abstract class ClassFile implements ClassFileInterface
      */
     private function checkTemplateExist(): void
     {
-        $templatePath = \sprintf(
-            '%s/%s/%s/%s/%s', 
-            $_SERVER["WORKDIR_PATH"], 
-            'src',
-            'Maker',
-            Creator::TEMPLATE_FOLDER_PATH, 
-            $this->getTemplatePath()
-        );
+        $templatePath = $this->getFullTemplatePath();
 
         if (!file_exists($templatePath)) {
             throw new \Exception(\sprintf('Cannot find template "%s" in the templates/ dir.', $templatePath));

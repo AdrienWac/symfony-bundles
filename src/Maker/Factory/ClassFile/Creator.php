@@ -53,6 +53,7 @@ final class Creator implements CreatorInterface
 
         if (!is_null($existingResponse)) {
             $this->addOperation($existingResponse);
+            return;
         }
 
         $responseFile = $this->buildResponseFile($domainPath, $folderPath, $name);
@@ -70,6 +71,7 @@ final class Creator implements CreatorInterface
 
         if (!is_null($existingPresenterInterface)) {
             $this->addOperation($existingPresenterInterface);
+            return;
         }
 
         $responseFile = $this->getInstanceOf($this->elementsList, ResponseFile::class);
@@ -96,6 +98,7 @@ final class Creator implements CreatorInterface
 
         if (!is_null($existingRequest)) {
             $this->addOperation($existingRequest);
+            return;
         }
 
         $requestFile = $this->buildRequestFile($domainPath, $folderPath, $name);
