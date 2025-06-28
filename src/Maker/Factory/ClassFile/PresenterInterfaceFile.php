@@ -58,6 +58,7 @@ final class PresenterInterfaceFile extends ClassFile
         return [
             'class_name' => $this->getClassName(),
             'namespace' => $this->getNameSpace(),
+            'use_case_name' => $this->useCaseName,
             'use_statements' => new UseStatementGenerator($this->getUseStatementArray())
         ];
     }
