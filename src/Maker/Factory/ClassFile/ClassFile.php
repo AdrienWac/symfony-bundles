@@ -5,6 +5,7 @@ namespace AdrienLbt\HexagonalMakerBundle\Maker\Factory\ClassFile;
 
 use AdrienLbt\HexagonalMakerBundle\Maker\Utils\Str\StrMakerBundleAdapter;
 use Symfony\Bundle\MakerBundle\FileManager;
+use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassProperty;
 
 abstract class ClassFile implements ClassFileInterface
 {
@@ -17,6 +18,9 @@ abstract class ClassFile implements ClassFileInterface
     protected array $useStatementArray;
 
     protected string $targetPath;
+
+    /** @var array<ClassProperty> $classAttributes */
+    protected array $classAttributes = [];
 
     public function __construct(
         private readonly string $domainFolderPath,
@@ -47,6 +51,19 @@ abstract class ClassFile implements ClassFileInterface
     abstract public function getTemplateVariables(): array;
 
     abstract public static function getUserQuestion(): string;
+    
+    protected function addClassAttributes(ClassProperty $classProperty): void
+    {
+        $this->classAttributes[] = $classProperty;
+    }
+
+    /**
+     * @return array<ClassProperty>
+     */
+    public function getClassAttributes(): array
+    {
+        return $this->classAttributes;
+    }
 
     /**
      * @return string

@@ -92,18 +92,20 @@ final class Creator implements CreatorInterface
         string $name,
         string $folderPath,
         string $domainPath
-    ): void
+    ): RequestFile
     {
         $existingRequest = $this->getInstanceOf($this->elementsList, RequestFile::class);
 
         if (!is_null($existingRequest)) {
             $this->addOperation($existingRequest);
-            return;
+            return $existingRequest;
         }
 
         $requestFile = $this->buildRequestFile($domainPath, $folderPath, $name);
 
         $this->addOperation($requestFile);
+
+        return $requestFile;
     }
 
     public function getInstanceOf(array $haystack, string $expectedInstanceOf): mixed
@@ -200,7 +202,7 @@ final class Creator implements CreatorInterface
 
     }
 
-    public function addOperation(ClassFile $classFile): void
+    private function addOperation(ClassFile $classFile): void
     {
         if ($this->fileManager->fileExists($classFile->getTargetPath())) {
             throw new \Exception(
@@ -214,6 +216,12 @@ final class Creator implements CreatorInterface
         $this->operationsList[] = $classFile;
     }
 
+    /**
+     * First creating php file from ClassFile instance template
+     * Then add properties if any
+     *
+     * @return void
+     */
     public function writeChanges(): void
     {
         foreach ($this->operationsList as $classFile) {
@@ -221,6 +229,10 @@ final class Creator implements CreatorInterface
                 $classFile->getTargetPath(),
                 $this->getFileContentsForOperation($classFile)
             );
+            // @todo Add properties if any in $classFile (use class manipulator)
+            if (!empty($classFile->getClassAttributes())) {
+                
+            }
         }
         
         $this->resetList();
